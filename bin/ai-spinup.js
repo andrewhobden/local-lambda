@@ -59,7 +59,7 @@ async function handleCommand(command, options) {
 }
 
 program
-  .name('local-lambda')
+  .name('ai-spinup')
   .description('Run a local REST server from a declarative JSON config with AI or JS handlers.')
   .version(pkg.version)
   .argument('<command>', 'start | stop')

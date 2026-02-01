@@ -79,7 +79,7 @@
         "additionalProperties": false
       },
       "aiPrompt": {
-        "prompt": "Return a JSON object with key 'countries' containing an array of country names in the specified continent. Be comprehensive and only list recognized sovereign states.",
+        "prompt": "Return exactly one JSON object with a single key 'countries' whose value is an array of sovereign country names in the specified continent. Do not include any other keys or commentary. Format: {\"countries\": [\"Country 1\", \"Country 2\", ...] }.",
         "model": "gpt-5-mini",
         "temperature": 1
       }

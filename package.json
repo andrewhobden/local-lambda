@@ -1,19 +1,19 @@
 {
-  "name": "local-lambda",
+  "name": "ai-spinup",
   "version": "1.0.0",
   "description": "Run a local REST server from a declarative JSON config with AI or JS handlers.",
-  "main": "bin/local-lambda.js",
+  "main": "bin/ai-spinup.js",
   "bin": {
-    "local-lambda": "./bin/local-lambda.js"
+    "ai-spinup": "./bin/ai-spinup.js"
   },
   "scripts": {
-    "start": "node bin/local-lambda.js start",
-    "dev": "node bin/local-lambda.js start -c examples/basic.json -p 3000",
+    "start": "node bin/ai-spinup.js start",
+    "dev": "node bin/ai-spinup.js start -c examples/basic.json -p 3000",
     "test": "mocha \"test/**/*.test.js\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andrewhobden/local-lambda.git"
+    "url": "git+https://github.com/andrewhobden/ai-spinup.git"
   },
   "keywords": [
     "rest",
@@ -26,9 +26,9 @@
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/andrewhobden/local-lambda/issues"
+    "url": "https://github.com/andrewhobden/ai-spinup/issues"
   },
-  "homepage": "https://github.com/andrewhobden/local-lambda#readme",
+  "homepage": "https://github.com/andrewhobden/ai-spinup#readme",
   "dependencies": {
     "ajv": "^8.17.1",
     "commander": "^12.1.0",

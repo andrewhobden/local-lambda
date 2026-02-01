@@ -1,10 +1,10 @@
-# Local Lambda Configuration (JSON)
+# AI Spinup Configuration (JSON)
 
 Describe your REST endpoints in a single JSON file. The CLI reads it and wires routes to AI prompts or JS handlers.
 
 ## CLI
-- `local-lambda start -c config.json -p 3000 -v debug`
-- `local-lambda stop` (only affects a server started in the same process; use Ctrl+C otherwise)
+- `ai-spinup start -c config.json -p 3000 -v debug`
+- `ai-spinup stop` (only affects a server started in the same process; use Ctrl+C otherwise)
 
 Environment:
 - `.env` is loaded automatically; set `OPENAI_API_KEY` there for any endpoint using `aiPrompt`.
