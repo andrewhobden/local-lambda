@@ -18,11 +18,13 @@ npx local-lambda start -c examples/basic.json
 4) Try the sample endpoints:
 - AI prompt: `POST http://localhost:4000/ai-greeting` with `{ "name": "Ada" }`
 - JS handler: `POST http://localhost:4000/sum` with `{ "a": 1, "b": 2 }`
+- AI prompt (GET): `GET http://localhost:4000/countries?continent=Europe`
 
 ## Configuration
 - See [CONFIG.md](CONFIG.md) for the JSON schema and field descriptions.
 - Sample config: [examples/basic.json](examples/basic.json)
 - Sample JS handler: [examples/handlers/sum.js](examples/handlers/sum.js)
+	- Includes endpoints: `hello-ai`, `sum-js`, and `countries` (GET with `continent` query)
 
 ### Minimal config example
 Save this as `config.json` (paths in `jsHandler.file` are relative to this file):
@@ -50,8 +52,8 @@ Save this as `config.json` (paths in `jsHandler.file` are relative to this file)
 			},
 			"aiPrompt": {
 				"prompt": "Write a JSON object with a key 'greeting' that greets the provided name in one short sentence.",
-				"model": "gpt-4o-mini",
-				"temperature": 0.4
+				"model": "gpt-5-mini",
+				"temperature": 1
 			}
 		},
 		{

@@ -20,8 +20,8 @@ async function createPromptHandler(endpoint, logger) {
   }
 
   const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  const model = endpoint.aiPrompt.model || 'gpt-4o-mini';
-  const temperature = endpoint.aiPrompt.temperature ?? 0.2;
+  const model = endpoint.aiPrompt.model || 'gpt-5-mini';
+  const temperature = endpoint.aiPrompt.temperature ?? 1;
 
   return async (input, req) => {
     const messages = [

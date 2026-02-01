@@ -27,7 +27,7 @@ Environment:
 ## AI prompt behavior
 - Builds messages with `description` as the system message and `aiPrompt.prompt` + input JSON as the user message.
 - Uses `response_format: json_object` when `outputSchema` is provided.
-- Default model: `gpt-4o-mini`; default temperature: `0.2`.
+- Default model: `gpt-5-mini`; default temperature: `1` (only supported value for this model).
 
 ## JS handler behavior
 - The handler module is loaded via `require` using a path relative to the config file directory.

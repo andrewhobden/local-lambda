@@ -24,8 +24,8 @@
       },
       "aiPrompt": {
         "prompt": "Write a JSON object with a single key 'greeting' that greets the provided name in one short sentence.",
-        "model": "gpt-4o-mini",
-        "temperature": 0.4
+        "model": "gpt-5-mini",
+        "temperature": 1
       }
     },
     {
@@ -52,6 +52,36 @@
       },
       "jsHandler": {
         "file": "handlers/sum.js"
+      }
+    },
+    {
+      "name": "countries",
+      "description": "Return country names for the given continent via an AI prompt.",
+      "path": "/countries",
+      "method": "GET",
+      "inputSchema": {
+        "type": "object",
+        "required": ["continent"],
+        "properties": {
+          "continent": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["countries"],
+        "properties": {
+          "countries": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      },
+      "aiPrompt": {
+        "prompt": "Return a JSON object with key 'countries' containing an array of country names in the specified continent. Be comprehensive and only list recognized sovereign states.",
+        "model": "gpt-5-mini",
+        "temperature": 1
       }
     }
   ]
