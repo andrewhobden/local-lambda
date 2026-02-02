@@ -1,19 +1,19 @@
 {
-  "name": "ai-spinup",
+  "name": "ai-lambda-service",
   "version": "1.0.0",
   "description": "Run a local REST server from a declarative JSON config with AI or JS handlers.",
-  "main": "bin/ai-spinup.js",
+  "main": "bin/ai-lambda-service.js",
   "bin": {
-    "ai-spinup": "./bin/ai-spinup.js"
+    "ai-lambda-service": "./bin/ai-lambda-service.js"
   },
   "scripts": {
-    "start": "node bin/ai-spinup.js start",
-    "dev": "node bin/ai-spinup.js start -c examples/basic.json -p 3000",
+    "start": "node bin/ai-lambda-service.js start",
+    "dev": "node bin/ai-lambda-service.js start -c examples/basic.json -p 3000",
     "test": "mocha \"test/**/*.test.js\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andrewhobden/ai-spinup.git"
+    "url": "git+https://github.com/andrewhobden/ai-lambda-service.git"
   },
   "keywords": [
     "rest",
@@ -26,9 +26,9 @@
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/andrewhobden/ai-spinup/issues"
+    "url": "https://github.com/andrewhobden/ai-lambda-service/issues"
   },
-  "homepage": "https://github.com/andrewhobden/ai-spinup#readme",
+  "homepage": "https://github.com/andrewhobden/ai-lambda-service#readme",
   "dependencies": {
     "ajv": "^8.17.1",
     "commander": "^12.1.0",

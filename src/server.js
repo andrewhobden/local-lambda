@@ -58,7 +58,7 @@ async function startServer({ config, port, logger = console }) {
   }
 
   const server = app.listen(port, () => {
-    logger.info(`ai-spinup listening on http://localhost:${port}`);
+    logger.info(`ai-lambda-service listening on http://localhost:${port}`);
   });
 
   currentServer = server;

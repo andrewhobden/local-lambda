@@ -1,4 +1,4 @@
-# ai-spinup
+# ai-lambda-service
 
 Run a local REST server from a declarative JSON config. Each endpoint can be backed by an OpenAI prompt or a JavaScript handler.
 
@@ -13,7 +13,7 @@ OPENAI_API_KEY=sk-...
 ```
 3) Start with the sample config:
 ```
-npx ai-spinup start -c examples/basic.json
+npx ai-lambda-service start -c examples/basic.json
 ```
 4) Try the sample endpoints:
 - AI prompt: `POST http://localhost:4000/ai-greeting` with `{ "name": "Ada" }`
@@ -94,11 +94,11 @@ module.exports = async (input) => {
 - `OPENAI_API_KEY` is required for any endpoint using `aiPrompt`.
 
 ## CLI
-Implemented in [bin/ai-spinup.js](bin/ai-spinup.js).
+Implemented in [bin/ai-lambda-service.js](bin/ai-lambda-service.js).
 
 ```
-ai-spinup start -c <config.json> -p <port> -v <level>
-ai-spinup stop
+ai-lambda-service start -c <config.json> -p <port> -v <level>
+ai-lambda-service stop
 ```
 - `-c, --config`: path to JSON config (default `./config.json`)
 - `-p, --port`: port override (else uses config.port or 3000)
