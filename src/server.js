@@ -24,7 +24,7 @@ async function startServer({ config, port, logger = console }) {
     const method = endpoint.method.toLowerCase();
     const validateInput = endpoint.inputSchema ? ajv.compile(endpoint.inputSchema) : null;
     const validateOutput = endpoint.outputSchema ? ajv.compile(endpoint.outputSchema) : null;
-    const handler = await createHandler(endpoint, config.baseDir, logger);
+    const handler = await createHandler(endpoint, config.baseDir, logger, config);
 
     if (typeof app[method] !== 'function') {
       throw new Error(`Unsupported method ${endpoint.method} for ${endpoint.path}`);

@@ -1,5 +1,6 @@
 {
   "port": 4000,
+  "defaultModel": "gpt-5-mini",
   "endpoints": [
     {
       "name": "hello-ai",
@@ -82,6 +83,24 @@
         "prompt": "Return exactly one JSON object with a single key 'countries' whose value is an array of sovereign country names in the specified continent. Do not include any other keys or commentary. Format: {\"countries\": [\"Country 1\", \"Country 2\", ...] }.",
         "model": "gpt-5-mini",
         "temperature": 1
+      }
+    },
+    {
+      "name": "translate",
+      "path": "/translate", 
+      "method": "GET",
+      "inputSchema": {
+        "type": "object",
+        "required": ["text"],
+        "properties": {
+          "text": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "description": "Translate the text into Chinese",
+      "aiPrompt": {
+        "prompt": "Translate the text",
+        "model": "gpt-5.2"
       }
     }
   ]

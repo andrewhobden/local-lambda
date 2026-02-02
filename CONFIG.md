@@ -11,6 +11,7 @@ Environment:
 
 ## Top-level fields
 - `port` (number, optional): default 3000 or CLI `-p` override.
+- `defaultModel` (string, optional): default OpenAI model for all `aiPrompt` endpoints (e.g., `gpt-5-mini`). Can be overridden per-endpoint.
 - `endpoints` (array, required): one or more endpoint objects.
 
 ## Endpoint fields

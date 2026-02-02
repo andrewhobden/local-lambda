@@ -1,13 +1,13 @@
 const path = require('node:path');
 
-async function createHandler(endpoint, baseDir, logger = console) {
+async function createHandler(endpoint, baseDir, logger = console, config = {}) {
   if (endpoint.aiPrompt) {
-    return createPromptHandler(endpoint, logger);
+    return createPromptHandler(endpoint, logger, config.defaultModel);
   }
   return createJsHandler(endpoint, baseDir);
 }
 
-async function createPromptHandler(endpoint, logger) {
+async function createPromptHandler(endpoint, logger, defaultModel) {
   if (!process.env.OPENAI_API_KEY) {
     throw new Error('OPENAI_API_KEY is required for aiPrompt handlers.');
   }
@@ -20,7 +20,7 @@ async function createPromptHandler(endpoint, logger) {
   }
 
   const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  const model = endpoint.aiPrompt.model || 'gpt-5-mini';
+  const model = endpoint.aiPrompt.model || defaultModel || 'gpt-5-mini';
   const temperature = endpoint.aiPrompt.temperature ?? 1;
 
   return async (input, req) => {

@@ -43,6 +43,7 @@ const configSchema = {
   required: ['endpoints'],
   properties: {
     port: { type: 'integer', minimum: 1 },
+    defaultModel: { type: 'string', minLength: 1 },
     endpoints: {
       type: 'array',
       minItems: 1,
