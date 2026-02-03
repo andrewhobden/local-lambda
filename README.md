@@ -2,19 +2,39 @@
 
 Run a local REST server from a declarative JSON config. Each endpoint can be backed by an OpenAI prompt or a JavaScript handler.
 
+## Installation
+
+Install globally via npm:
+
+```bash
+npm install -g ai-lambda-service
+```
+
+Or add it as a project dependency:
+
+```bash
+npm install ai-lambda-service
+```
+
 ## Quick start
-1) Install deps:
-```
-npm install
-```
-2) Add your OpenAI key to `.env`:
+
+1) Add your OpenAI key to `.env`:
 ```
 OPENAI_API_KEY=sk-...
 ```
-3) Start with the sample config:
+
+2) Create a config file (e.g., `config.json`) — see [Configuration](#configuration) below.
+
+3) Start the server:
+```bash
+ai-lambda-service start -c config.json
 ```
-npx ai-lambda-service start -c examples/basic.json
+
+Or if installed locally, use npx:
+```bash
+npx ai-lambda-service start -c config.json
 ```
+
 4) Try the sample endpoints:
 - AI prompt: `POST http://localhost:4000/ai-greeting` with `{ "name": "Ada" }`
 - JS handler: `POST http://localhost:4000/sum` with `{ "a": 1, "b": 2 }`
