@@ -1,6 +1,6 @@
 # ai-lambda-service
 
-Run a local REST server from a declarative JSON config. Each endpoint can be backed by an OpenAI prompt, a JavaScript handler, or a Microsoft 365 Copilot query via [WorkIQ](https://github.com/microsoft/workiq).
+Run a local REST server from a declarative JSON config. Each endpoint can be backed by an OpenAI prompt, a JavaScript handler, or a Microsoft 365 Copilot query via [WorkIQ](https://github.com/microsoft/work-iq-mcp).
 
 ## Installation
 
@@ -137,13 +137,13 @@ module.exports = async (input) => {
 
 ## WorkIQ Integration
 
-Endpoints can query Microsoft 365 Copilot using [WorkIQ](https://github.com/microsoft/workiq). This enables natural language queries about your emails, meetings, files, and other M365 data.
+Endpoints can query Microsoft 365 Copilot using [WorkIQ](https://github.com/microsoft/work-iq-mcp). This enables natural language queries about your emails, meetings, files, and other M365 data.
 
 ### Prerequisites
 
 1. Install WorkIQ CLI globally:
 ```bash
-npm install -g @anthropic/workiq
+npm install -g @microsoft/workiq
 ```
 
 2. Authenticate with your Microsoft 365 account:
