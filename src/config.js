@@ -33,6 +33,14 @@ const endpointSchema = {
         file: { type: 'string', minLength: 1 },
         export: { type: 'string', minLength: 1 }
       }
+    },
+    workiqQuery: {
+      type: 'object',
+      additionalProperties: false,
+      required: ['query'],
+      properties: {
+        query: { type: 'string', minLength: 1 }
+      }
     }
   }
 };
@@ -79,8 +87,10 @@ async function loadConfig(configPath, logger = console) {
   parsed.endpoints.forEach((ep, index) => {
     const hasPrompt = Boolean(ep.aiPrompt);
     const hasJs = Boolean(ep.jsHandler);
-    if (hasPrompt === hasJs) {
-      throw new Error(`Endpoint at index ${index} must specify exactly one of aiPrompt or jsHandler.`);
+    const hasWorkiq = Boolean(ep.workiqQuery);
+    const handlerCount = [hasPrompt, hasJs, hasWorkiq].filter(Boolean).length;
+    if (handlerCount !== 1) {
+      throw new Error(`Endpoint at index ${index} must specify exactly one of aiPrompt, jsHandler, or workiqQuery.`);
     }
     ep.method = ep.method.toUpperCase();
   });

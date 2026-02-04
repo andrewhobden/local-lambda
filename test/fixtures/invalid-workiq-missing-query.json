@@ -1,0 +1,11 @@
+{
+  "endpoints": [
+    {
+      "name": "invalid",
+      "description": "workiqQuery without query field",
+      "path": "/invalid",
+      "method": "GET",
+      "workiqQuery": {}
+    }
+  ]
+}

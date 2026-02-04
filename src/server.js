@@ -11,7 +11,7 @@ function generateIndexPage(config, port) {
     path: ep.path,
     method: ep.method,
     inputSchema: ep.inputSchema || null,
-    handlerType: ep.aiPrompt ? 'AI Prompt' : 'JS Handler'
+    handlerType: ep.aiPrompt ? 'AI Prompt' : ep.workiqQuery ? 'Workiq Query' : 'JS Handler'
   }));
 
   return `<!DOCTYPE html>

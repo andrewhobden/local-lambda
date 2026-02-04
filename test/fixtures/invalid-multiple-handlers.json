@@ -1,0 +1,16 @@
+{
+  "endpoints": [
+    {
+      "name": "invalid",
+      "description": "Has both aiPrompt and workiqQuery",
+      "path": "/invalid",
+      "method": "GET",
+      "aiPrompt": {
+        "prompt": "test"
+      },
+      "workiqQuery": {
+        "query": "test"
+      }
+    }
+  ]
+}

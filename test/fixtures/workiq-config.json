@@ -1,0 +1,38 @@
+{
+  "endpoints": [
+    {
+      "name": "test-workiq",
+      "description": "Test workiq query endpoint.",
+      "path": "/meetings",
+      "method": "GET",
+      "inputSchema": {
+        "type": "object",
+        "required": ["day"],
+        "properties": {
+          "day": { "type": "string" },
+          "timeOfDay": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["meetings"],
+        "properties": {
+          "meetings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": { "type": "string" },
+                "time": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "workiqQuery": {
+        "query": "What meetings do I have on {{day}} {{timeOfDay}}?"
+      }
+    }
+  ]
+}

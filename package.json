@@ -1,6 +1,6 @@
 {
   "name": "ai-lambda-service",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Run a local REST server from a declarative JSON config with AI or JS handlers.",
   "main": "bin/ai-lambda-service.js",
   "bin": {

@@ -102,6 +102,24 @@
         "prompt": "Translate the provided text into Chinese. Return only the translated text, nothing else.",
         "model": "gpt-5.2"
       }
+    },
+    {
+      "name": "meetings",
+      "description": "Get meetings for a specific day and time using Workiq.",
+      "path": "/meetings",
+      "method": "GET",
+      "inputSchema": {
+        "type": "object",
+        "required": ["day"],
+        "properties": {
+          "day": { "type": "string" },
+          "timeOfDay": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "workiqQuery": {
+        "query": "What meetings do I have on {{day}} {{timeOfDay}}?"
+      }
     }
   ]
 }
