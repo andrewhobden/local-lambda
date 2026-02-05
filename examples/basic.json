@@ -120,6 +120,26 @@
       "workiqQuery": {
         "query": "What meetings do I have on {{day}} {{timeOfDay}}?"
       }
+    },
+    {
+      "name": "local-joke",
+      "description": "Generate a short joke using a local LLM via LM Studio. Returns plain text (no JSON schema) for better compatibility with local models.",
+      "path": "/local-joke",
+      "method": "GET",
+      "inputSchema": {
+        "type": "object",
+        "required": ["topic"],
+        "properties": {
+          "topic": { "type": "string", "description": "The topic for the joke" }
+        },
+        "additionalProperties": false
+      },
+      "aiPrompt": {
+        "prompt": "Write a short, family-friendly joke about the provided topic. Return only the joke text, nothing else.",
+        "baseUrl": "http://localhost:1234/v1",
+        "model": "llama-3.2-3b-instruct",
+        "temperature": 0.8
+      }
     }
   ]
 }

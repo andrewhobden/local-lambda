@@ -284,7 +284,7 @@ async function getWorkiqMcpClient(logger) {
 
 async function createHandler(endpoint, baseDir, logger = console, config = {}) {
   if (endpoint.aiPrompt) {
-    return createPromptHandler(endpoint, logger, config.defaultModel);
+    return createPromptHandler(endpoint, logger, config);
   }
   if (endpoint.workiqQuery) {
     return createWorkiqHandler(endpoint, logger);
@@ -292,9 +292,17 @@ async function createHandler(endpoint, baseDir, logger = console, config = {}) {
   return createJsHandler(endpoint, baseDir);
 }
 
-async function createPromptHandler(endpoint, logger, defaultModel) {
-  if (!process.env.OPENAI_API_KEY) {
-    throw new Error('OPENAI_API_KEY is required for aiPrompt handlers.');
+async function createPromptHandler(endpoint, logger, config = {}) {
+  // Resolve API key: endpoint > config > environment
+  const apiKey = endpoint.aiPrompt.apiKey || config.defaultApiKey || process.env.OPENAI_API_KEY;
+  
+  // Resolve base URL: endpoint > config > default (OpenAI)
+  const baseUrl = endpoint.aiPrompt.baseUrl || config.defaultBaseUrl;
+  
+  // API key is only required when using OpenAI (no custom baseUrl) or if explicitly set
+  // Local LLM servers like LM Studio often don't require auth
+  if (!apiKey && !baseUrl) {
+    throw new Error('OPENAI_API_KEY is required for aiPrompt handlers, or specify a baseUrl for local LLM servers.');
   }
 
   let OpenAI;
@@ -304,8 +312,19 @@ async function createPromptHandler(endpoint, logger, defaultModel) {
     throw new Error(`Failed to load OpenAI SDK: ${err.message}`);
   }
 
-  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  const model = endpoint.aiPrompt.model || defaultModel || 'gpt-5-mini';
+  const clientOptions = {};
+  if (apiKey) {
+    clientOptions.apiKey = apiKey;
+  } else {
+    // For local servers without auth, use a dummy key (SDK requires something)
+    clientOptions.apiKey = 'not-required';
+  }
+  if (baseUrl) {
+    clientOptions.baseURL = baseUrl;
+  }
+
+  const client = new OpenAI(clientOptions);
+  const model = endpoint.aiPrompt.model || config.defaultModel || 'gpt-4o-mini';
   const temperature = endpoint.aiPrompt.temperature ?? 1;
 
   return async (input, req) => {
@@ -321,12 +340,13 @@ async function createPromptHandler(endpoint, logger, defaultModel) {
       model,
       messages,
       temperature,
-      response_format: endpoint.outputSchema ? { type: 'json_object' } : undefined
+      // Only include response_format if using OpenAI (some local servers don't support it)
+      ...(endpoint.outputSchema && !baseUrl ? { response_format: { type: 'json_object' } } : {})
     });
 
     const content = response.choices?.[0]?.message?.content?.trim();
     if (!content) {
-      throw new Error('No content returned from OpenAI.');
+      throw new Error('No content returned from LLM.');
     }
 
     // If no outputSchema, return raw text directly
@@ -338,7 +358,7 @@ async function createPromptHandler(endpoint, logger, defaultModel) {
     try {
       return JSON.parse(content);
     } catch (err) {
-      logger.warn('OpenAI response was not valid JSON, returning raw text.');
+      logger.warn('LLM response was not valid JSON, returning raw text.');
       return { result: content };
     }
   };

@@ -40,6 +40,7 @@ npx ai-lambda-service start -c config.json
 - JS handler: `POST http://localhost:4000/sum` with `{ "a": 1, "b": 2 }`
 - AI prompt (GET): `GET http://localhost:4000/countries?continent=Europe`
 - WorkIQ query: `GET http://localhost:4000/meetings?day=today&timeOfDay=morning`
+- Local LLM: `GET http://localhost:4000/local-joke?topic=programming` (requires LM Studio)
 
 5) **Or use the interactive dashboard** — open `http://localhost:4000` in your browser!
 
@@ -133,7 +134,96 @@ module.exports = async (input) => {
 
 ### Environment
 - `.env` is loaded automatically.
-- `OPENAI_API_KEY` is required for any endpoint using `aiPrompt`.
+- `OPENAI_API_KEY` is required for any endpoint using `aiPrompt` (unless using a local LLM server).
+
+## Local LLM Support (LM Studio, Ollama, etc.)
+
+You can use any OpenAI-compatible LLM server instead of OpenAI. This works great with:
+- [LM Studio](https://lmstudio.ai/) - Run local models with a GUI
+- [Ollama](https://ollama.ai/) - Run local models from the command line
+- [vLLM](https://docs.vllm.ai/) - High-throughput LLM serving
+- Any other OpenAI-compatible server
+
+### Configuration Options
+
+| Field | Level | Description |
+|-------|-------|-------------|
+| `defaultBaseUrl` | Top-level | Default LLM server URL for all endpoints |
+| `defaultModel` | Top-level | Default model name for all endpoints |
+| `defaultApiKey` | Top-level | Default API key (falls back to `OPENAI_API_KEY` env var) |
+| `baseUrl` | Per-endpoint | Override server URL for this endpoint |
+| `model` | Per-endpoint | Override model for this endpoint |
+| `apiKey` | Per-endpoint | Override API key for this endpoint |
+
+### Example: Using LM Studio
+
+1. Start LM Studio and load a model (e.g., `llama-3.2-3b-instruct`)
+2. Enable the local server (default: `http://localhost:1234/v1`)
+3. Configure your endpoint:
+
+```json
+{
+  "defaultBaseUrl": "http://localhost:1234/v1",
+  "defaultModel": "llama-3.2-3b-instruct",
+  "endpoints": [
+    {
+      "name": "local-greeting",
+      "description": "Generate a greeting using local LLM",
+      "path": "/greeting",
+      "method": "POST",
+      "inputSchema": {
+        "type": "object",
+        "required": ["name"],
+        "properties": { "name": { "type": "string" } }
+      },
+      "aiPrompt": {
+        "prompt": "Generate a friendly greeting for the provided name."
+      }
+    }
+  ]
+}
+```
+
+### Tips for Local LLMs
+
+- **Plain text responses**: Local models are more reliable without `outputSchema`. Omit it to get plain text responses instead of JSON.
+- **Explicit prompts**: Local models may need more explicit instructions than OpenAI models.
+- **Model names**: Use the exact model name shown in LM Studio or Ollama.
+- **No API key required**: Local servers typically don't require authentication.
+
+### Mixed Configuration (Local + Cloud)
+
+You can use both local and cloud LLMs in the same config:
+
+```json
+{
+  "endpoints": [
+    {
+      "name": "cloud-endpoint",
+      "description": "Uses OpenAI",
+      "path": "/cloud",
+      "method": "POST",
+      "aiPrompt": {
+        "prompt": "...",
+        "model": "gpt-4o"
+      }
+    },
+    {
+      "name": "local-endpoint", 
+      "description": "Uses local LM Studio",
+      "path": "/local",
+      "method": "POST",
+      "aiPrompt": {
+        "prompt": "...",
+        "baseUrl": "http://localhost:1234/v1",
+        "model": "llama-3.2-3b-instruct"
+      }
+    }
+  ]
+}
+```
+
+See [CONFIG.md](CONFIG.md) for full documentation on all `aiPrompt` options.
 
 ## WorkIQ Integration
 

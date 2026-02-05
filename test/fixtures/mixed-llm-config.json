@@ -1,0 +1,39 @@
+{
+  "endpoints": [
+    {
+      "name": "cloud-endpoint",
+      "description": "Uses OpenAI (default)",
+      "path": "/cloud",
+      "method": "POST",
+      "inputSchema": {
+        "type": "object",
+        "required": ["text"],
+        "properties": {
+          "text": { "type": "string" }
+        }
+      },
+      "aiPrompt": {
+        "prompt": "Echo the text back.",
+        "model": "gpt-4o"
+      }
+    },
+    {
+      "name": "local-endpoint",
+      "description": "Uses local LM Studio",
+      "path": "/local",
+      "method": "POST",
+      "inputSchema": {
+        "type": "object",
+        "required": ["text"],
+        "properties": {
+          "text": { "type": "string" }
+        }
+      },
+      "aiPrompt": {
+        "prompt": "Echo the text back.",
+        "baseUrl": "http://localhost:1234/v1",
+        "model": "llama-3.2-3b-instruct"
+      }
+    }
+  ]
+}

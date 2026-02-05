@@ -1,0 +1,31 @@
+{
+  "defaultBaseUrl": "http://localhost:1234/v1",
+  "defaultModel": "local-model",
+  "endpoints": [
+    {
+      "name": "test-local-llm",
+      "description": "Test local LLM endpoint.",
+      "path": "/greeting",
+      "method": "POST",
+      "inputSchema": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["greeting"],
+        "properties": {
+          "greeting": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "aiPrompt": {
+        "prompt": "Generate a greeting for the provided name."
+      }
+    }
+  ]
+}

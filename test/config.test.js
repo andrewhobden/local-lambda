@@ -38,4 +38,25 @@ describe('config loader', () => {
     const badConfigPath = path.join(__dirname, 'fixtures', 'invalid-workiq-missing-query.json');
     await assert.rejects(() => loadConfig(badConfigPath, noopLogger), /query/);
   });
+
+  it('loads a valid config with local LLM settings', async () => {
+    const configPath = path.join(__dirname, 'fixtures', 'local-llm-config.json');
+    const config = await loadConfig(configPath, noopLogger);
+
+    assert.equal(config.endpoints.length, 1);
+    assert.equal(config.defaultBaseUrl, 'http://localhost:1234/v1');
+    assert.equal(config.defaultModel, 'local-model');
+    assert.ok(config.endpoints[0].aiPrompt);
+  });
+
+  it('loads config with per-endpoint baseUrl override', async () => {
+    const configPath = path.join(__dirname, 'fixtures', 'mixed-llm-config.json');
+    const config = await loadConfig(configPath, noopLogger);
+
+    assert.equal(config.endpoints.length, 2);
+    // First endpoint uses default (no baseUrl)
+    assert.ok(!config.endpoints[0].aiPrompt.baseUrl);
+    // Second endpoint has its own baseUrl
+    assert.equal(config.endpoints[1].aiPrompt.baseUrl, 'http://localhost:1234/v1');
+  });
 });

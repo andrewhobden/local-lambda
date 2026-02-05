@@ -11,7 +11,9 @@ Environment:
 
 ## Top-level fields
 - `port` (number, optional): default 3000 or CLI `-p` override.
-- `defaultModel` (string, optional): default OpenAI model for all `aiPrompt` endpoints (e.g., `gpt-5-mini`). Can be overridden per-endpoint.
+- `defaultModel` (string, optional): default LLM model for all `aiPrompt` endpoints (e.g., `gpt-4o-mini`). Can be overridden per-endpoint.
+- `defaultBaseUrl` (string, optional): default base URL for all `aiPrompt` endpoints. Use this for local LLM servers like LM Studio (e.g., `http://localhost:1234/v1`).
+- `defaultApiKey` (string, optional): default API key for all `aiPrompt` endpoints. Falls back to `OPENAI_API_KEY` environment variable if not set.
 - `endpoints` (array, required): one or more endpoint objects.
 
 ## Endpoint fields
@@ -22,14 +24,72 @@ Environment:
 - `inputSchema` (object, optional): JSON Schema for validating request input. For `GET` the query object is validated; for `POST` the JSON body is validated.
 - `outputSchema` (object, optional): JSON Schema for validating handler output.
 - Exactly **one** of:
-  - `aiPrompt`: `{ prompt: string, model?: string, temperature?: number }`
+  - `aiPrompt`: `{ prompt: string, model?: string, temperature?: number, baseUrl?: string, apiKey?: string }`
   - `jsHandler`: `{ file: string, export?: string }` where `file` is relative to the config file directory.
   - `workiqQuery`: `{ query: string }` where `query` is the Workiq copilot query to execute.
 
 ## AI prompt behavior
 - Builds messages with `description` as the system message and `aiPrompt.prompt` + input JSON as the user message.
-- Model priority: per-endpoint `aiPrompt.model` > top-level `defaultModel` > built-in default `gpt-5-mini`.
+- Model priority: per-endpoint `aiPrompt.model` > top-level `defaultModel` > built-in default `gpt-4o-mini`.
+- Base URL priority: per-endpoint `aiPrompt.baseUrl` > top-level `defaultBaseUrl` > OpenAI default.
+- API key priority: per-endpoint `aiPrompt.apiKey` > top-level `defaultApiKey` > `OPENAI_API_KEY` env var.
 - Default temperature: `1`.
+
+### Using local LLM servers (LM Studio, Ollama, etc.)
+
+You can use any OpenAI-compatible LLM server by specifying a `baseUrl`. Local servers typically don't require an API key.
+
+**Global configuration (all endpoints use the same server):**
+```json
+{
+  "defaultBaseUrl": "http://localhost:1234/v1",
+  "defaultModel": "local-model",
+  "endpoints": [...]
+}
+```
+
+**Per-endpoint configuration:**
+```json
+{
+  "name": "local-greeting",
+  "path": "/greeting",
+  "method": "POST",
+  "description": "Generate a greeting using local LLM",
+  "inputSchema": {
+    "type": "object",
+    "required": ["name"],
+    "properties": { "name": { "type": "string" } }
+  },
+  "aiPrompt": {
+    "prompt": "Generate a friendly greeting for {{name}}",
+    "baseUrl": "http://localhost:1234/v1",
+    "model": "llama-3.2-3b-instruct"
+  }
+}
+```
+
+**Mixed configuration (some endpoints use OpenAI, others use local):**
+```json
+{
+  "endpoints": [
+    {
+      "name": "openai-endpoint",
+      "aiPrompt": {
+        "prompt": "...",
+        "model": "gpt-4o"
+      }
+    },
+    {
+      "name": "local-endpoint",
+      "aiPrompt": {
+        "prompt": "...",
+        "baseUrl": "http://localhost:1234/v1",
+        "model": "local-model"
+      }
+    }
+  ]
+}
+```
 
 ### Output handling
 - **With `outputSchema`**: Uses `response_format: json_object` to enforce structured JSON output. The response is parsed and validated against the schema, then returned as `application/json`.

@@ -51,8 +51,80 @@ describe('engine', () => {
       try {
         await assert.rejects(
           () => createHandler(endpoint, __dirname, noopLogger),
-          /OPENAI_API_KEY is required/
+          /OPENAI_API_KEY is required|baseUrl/
         );
+      } finally {
+        if (originalKey) process.env.OPENAI_API_KEY = originalKey;
+      }
+    });
+
+    it('allows aiPrompt without API key when baseUrl is provided', async () => {
+      const originalKey = process.env.OPENAI_API_KEY;
+      delete process.env.OPENAI_API_KEY;
+      
+      const endpoint = {
+        name: 'test-local',
+        aiPrompt: { 
+          prompt: 'test',
+          baseUrl: 'http://localhost:1234/v1',
+          model: 'local-model'
+        }
+      };
+      
+      try {
+        // Should not throw - baseUrl allows no API key
+        const handler = await createHandler(endpoint, __dirname, noopLogger);
+        assert.equal(typeof handler, 'function');
+      } finally {
+        if (originalKey) process.env.OPENAI_API_KEY = originalKey;
+      }
+    });
+
+    it('allows aiPrompt with config-level defaultBaseUrl', async () => {
+      const originalKey = process.env.OPENAI_API_KEY;
+      delete process.env.OPENAI_API_KEY;
+      
+      const endpoint = {
+        name: 'test-local-default',
+        aiPrompt: { 
+          prompt: 'test'
+        }
+      };
+      
+      const config = {
+        defaultBaseUrl: 'http://localhost:1234/v1',
+        defaultModel: 'local-model'
+      };
+      
+      try {
+        // Should not throw - config defaultBaseUrl allows no API key
+        const handler = await createHandler(endpoint, __dirname, noopLogger, config);
+        assert.equal(typeof handler, 'function');
+      } finally {
+        if (originalKey) process.env.OPENAI_API_KEY = originalKey;
+      }
+    });
+
+    it('uses config defaultApiKey when OPENAI_API_KEY not set', async () => {
+      const originalKey = process.env.OPENAI_API_KEY;
+      delete process.env.OPENAI_API_KEY;
+      
+      const endpoint = {
+        name: 'test-config-key',
+        aiPrompt: { 
+          prompt: 'test',
+          model: 'gpt-4o'
+        }
+      };
+      
+      const config = {
+        defaultApiKey: 'sk-test-key'
+      };
+      
+      try {
+        // Should not throw - config provides API key
+        const handler = await createHandler(endpoint, __dirname, noopLogger, config);
+        assert.equal(typeof handler, 'function');
       } finally {
         if (originalKey) process.env.OPENAI_API_KEY = originalKey;
       }

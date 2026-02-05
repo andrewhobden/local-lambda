@@ -22,7 +22,9 @@ const endpointSchema = {
       properties: {
         prompt: { type: 'string', minLength: 1 },
         model: { type: 'string', minLength: 1 },
-        temperature: { type: 'number', minimum: 0, maximum: 2 }
+        temperature: { type: 'number', minimum: 0, maximum: 2 },
+        baseUrl: { type: 'string', minLength: 1 },
+        apiKey: { type: 'string', minLength: 1 }
       }
     },
     jsHandler: {
@@ -52,6 +54,8 @@ const configSchema = {
   properties: {
     port: { type: 'integer', minimum: 1 },
     defaultModel: { type: 'string', minLength: 1 },
+    defaultBaseUrl: { type: 'string', minLength: 1 },
+    defaultApiKey: { type: 'string', minLength: 1 },
     endpoints: {
       type: 'array',
       minItems: 1,
